@@ -12,7 +12,8 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
-import enums.Grid_Size;
+import enums.GridSize;
+import java.io.InputStream;
 
 public class Board extends JLabel implements Observer {
 
@@ -27,12 +28,12 @@ public class Board extends JLabel implements Observer {
 	static Cell[] turbo_boosts = new Cell[NR_TURBO_BOOSTS];
 	static int[] result = new int[SnakeApp.MAX_THREADS];
 	Random random = new Random();
-	static Cell[][] gameboard = new Cell[Grid_Size.GRID_WIDTH][Grid_Size.GRID_HEIGHT];
+	static Cell[][] gameboard = new Cell[GridSize.GRID_WIDTH][GridSize.GRID_HEIGHT];
 
 	@SuppressWarnings("unused")
 	public Board() {
-		if ((NR_BARRIERS + NR_JUMP_PADS + NR_FOOD + NR_TURBO_BOOSTS) > Grid_Size.GRID_HEIGHT
-				* Grid_Size.GRID_WIDTH)
+		if ((NR_BARRIERS + NR_JUMP_PADS + NR_FOOD + NR_TURBO_BOOSTS) > GridSize.GRID_HEIGHT
+				* GridSize.GRID_WIDTH)
 			throw new IllegalArgumentException(); 
 		GenerateBoard();
 		GenerateFood();
@@ -43,8 +44,8 @@ public class Board extends JLabel implements Observer {
 
 	private void GenerateTurboBoosts() {
 		for (int i = 0; i != NR_TURBO_BOOSTS; i++) {
-			Cell tmp = gameboard[random.nextInt(Grid_Size.GRID_WIDTH)][random
-					.nextInt(Grid_Size.GRID_HEIGHT)];
+			Cell tmp = gameboard[random.nextInt(GridSize.GRID_WIDTH)][random
+					.nextInt(GridSize.GRID_HEIGHT)];
 			if (!tmp.hasElements()) {
 				turbo_boosts[i] = tmp;
 				turbo_boosts[i].setTurbo_boost(true);
@@ -56,8 +57,8 @@ public class Board extends JLabel implements Observer {
 
 	private void GenerateJumpPads() {
 		for (int i = 0; i != NR_JUMP_PADS; i++) {
-			Cell tmp = gameboard[random.nextInt(Grid_Size.GRID_WIDTH)][random
-					.nextInt(Grid_Size.GRID_HEIGHT)];
+			Cell tmp = gameboard[random.nextInt(GridSize.GRID_WIDTH)][random
+					.nextInt(GridSize.GRID_HEIGHT)];
 			if (!tmp.hasElements()) {
 				jump_pads[i] = tmp;
 				jump_pads[i].setJump_pad(true);
@@ -68,10 +69,10 @@ public class Board extends JLabel implements Observer {
 	}
 
 	private void GenerateBoard() {
-		for (int i = 0; i != Grid_Size.GRID_WIDTH; i++) {
-			for (int j = 0; j != Grid_Size.GRID_HEIGHT; j++) {
+		for (int i = 0; i != GridSize.GRID_WIDTH; i++) {
+			for (int j = 0; j != GridSize.GRID_HEIGHT; j++) {
 				gameboard[i][j] = new Cell(i, j);
-				System.out.println(" ins " + gameboard[i][j]);
+				//System.out.println(" ins " + gameboard[i][j]);
 			}
 		}
 
@@ -79,8 +80,8 @@ public class Board extends JLabel implements Observer {
 
 	private void GenerateBarriers() {
 		for (int i = 0; i != NR_BARRIERS; i++) {
-			Cell tmp = gameboard[random.nextInt(Grid_Size.GRID_WIDTH)][random
-					.nextInt(Grid_Size.GRID_HEIGHT)];
+			Cell tmp = gameboard[random.nextInt(GridSize.GRID_WIDTH)][random
+					.nextInt(GridSize.GRID_HEIGHT)];
 			if (!tmp.hasElements()) {
 				barriers[i] = tmp;
 				barriers[i].setBarrier(true);
@@ -92,8 +93,8 @@ public class Board extends JLabel implements Observer {
 
 	private void GenerateFood() {
 		for (int i = 0; i != NR_FOOD; i++) {
-			Cell tmp = gameboard[random.nextInt(Grid_Size.GRID_WIDTH)][random
-					.nextInt(Grid_Size.GRID_HEIGHT)];
+			Cell tmp = gameboard[random.nextInt(GridSize.GRID_WIDTH)][random
+					.nextInt(GridSize.GRID_HEIGHT)];
 			if (!tmp.hasElements()) {
 				food[i] = tmp;
 				food[i].setFood(true);
@@ -116,50 +117,48 @@ public class Board extends JLabel implements Observer {
 
 	private void drawTurboBoosts(Graphics g) {
 		Image light = null;
-		URL resource = getClass().getResource("../Img/lightning.png");
+                InputStream resource=ClassLoader.getSystemResourceAsStream("Img/lightning.png");
 		try {
 			light = ImageIO.read(resource);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		for (Cell c : turbo_boosts) {
-			g.drawImage(light, c.getX() * Grid_Size.WIDTH_BOX, c.getY()
-					* Grid_Size.HEIGH_BOX, this);
+			g.drawImage(light, c.getX() * GridSize.WIDTH_BOX, c.getY()
+					* GridSize.HEIGH_BOX, this);
 		}
 	}
 
 	private void drawJumpPads(Graphics g) {
 		Image jump = null;
-		URL resource = getClass().getResource("../Img/up.png");
-		try {
+                
+                InputStream resource=ClassLoader.getSystemResourceAsStream("Img/up.png");
+
+                try {
 			jump = ImageIO.read(resource);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		for (Cell c : jump_pads) {
-			g.drawImage(jump, c.getX() * Grid_Size.WIDTH_BOX, c.getY()
-					* Grid_Size.HEIGH_BOX, this);
+			g.drawImage(jump, c.getX() * GridSize.WIDTH_BOX, c.getY()
+					* GridSize.HEIGH_BOX, this);
 		}
-		// g.setColor(Color.ORANGE);
-		// for (Cell c : jump_pads) {
-		// g.fillOval(c.getX() * Grid_Size.WIDTH_BOX, c.getY()
-		// * Grid_Size.HEIGH_BOX, Grid_Size.WIDTH_BOX,
-		// Grid_Size.HEIGH_BOX);
-		// }
 	}
 
 	private void drawBarriers(Graphics g) {
 
 		Image firewall = null;
-		URL resource = getClass().getResource("../Img/firewall.png");
-		try {
+                
+                InputStream resource=ClassLoader.getSystemResourceAsStream("Img/firewall.png");
+
+                try {
 			firewall = ImageIO.read(resource);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		for (Cell c : barriers) {
-			g.drawImage(firewall, c.getX() * Grid_Size.WIDTH_BOX, c.getY()
-					* Grid_Size.HEIGH_BOX, this);
+			g.drawImage(firewall, c.getX() * GridSize.WIDTH_BOX, c.getY()
+					* GridSize.HEIGH_BOX, this);
 			// g.fillRect(c.getX() * Grid_Size.WIDTH_BOX, c.getY()
 			// * Grid_Size.HEIGH_BOX, Grid_Size.WIDTH_BOX,
 			// Grid_Size.HEIGH_BOX);
@@ -168,7 +167,8 @@ public class Board extends JLabel implements Observer {
 
 	private void drawFood(Graphics g) {
 		Image mouse = null;
-		URL resource = getClass().getResource("../Img/mouse.png");
+                InputStream resource=ClassLoader.getSystemResourceAsStream("Img/mouse.png");
+		
 		try {
 			mouse = ImageIO.read(resource);
 		} catch (IOException e) {
@@ -176,8 +176,8 @@ public class Board extends JLabel implements Observer {
 		}
 
 		for (Cell c : food){
-		g.drawImage(mouse, c.getX() * Grid_Size.WIDTH_BOX, c.getY()
-				* Grid_Size.HEIGH_BOX, this);
+		g.drawImage(mouse, c.getX() * GridSize.WIDTH_BOX, c.getY()
+				* GridSize.HEIGH_BOX, this);
 		}
 	}
 
@@ -185,18 +185,18 @@ public class Board extends JLabel implements Observer {
 		for (int i = 0; i != SnakeApp.MAX_THREADS; i++) {
 			for (Cell p : SnakeApp.getApp().snakes[i].getBody()) {
 				if (p.equals(SnakeApp.getApp().snakes[i].getBody().peekFirst())) {
-					g.setColor(new Color(050, 205, 050));
-					g.fillRect(p.getX() * Grid_Size.WIDTH_BOX, p.getY()
-							* Grid_Size.HEIGH_BOX, Grid_Size.WIDTH_BOX,
-							Grid_Size.HEIGH_BOX);
+					g.setColor(new Color(050+(i*10), 205, 150));
+					g.fillRect(p.getX() * GridSize.WIDTH_BOX, p.getY()
+							* GridSize.HEIGH_BOX, GridSize.WIDTH_BOX,
+							GridSize.HEIGH_BOX);
 				} else {
 					if (SnakeApp.getApp().snakes[i].isSelected()) {
 						g.setColor(new Color(032, 178, 170));
 					} else
 						g.setColor(new Color(034, 139, 034));
-					g.fillRect(p.getX() * Grid_Size.WIDTH_BOX, p.getY()
-							* Grid_Size.HEIGH_BOX, Grid_Size.WIDTH_BOX,
-							Grid_Size.HEIGH_BOX);
+					g.fillRect(p.getX() * GridSize.WIDTH_BOX, p.getY()
+							* GridSize.HEIGH_BOX, GridSize.WIDTH_BOX,
+							GridSize.HEIGH_BOX);
 				}
 			}
 		}
@@ -205,18 +205,18 @@ public class Board extends JLabel implements Observer {
 
 	private void drawGrid(Graphics g) {
 		g.setColor(new Color(255, 250, 250));
-		g.fillRect(0, 0, Grid_Size.GRID_WIDTH * Grid_Size.WIDTH_BOX,
-				Grid_Size.GRID_HEIGHT * Grid_Size.HEIGH_BOX);
+		g.fillRect(0, 0, GridSize.GRID_WIDTH * GridSize.WIDTH_BOX,
+				GridSize.GRID_HEIGHT * GridSize.HEIGH_BOX);
 		g.setColor(new Color(135, 135, 135));
-		g.drawRect(0, 0, Grid_Size.GRID_WIDTH * Grid_Size.WIDTH_BOX,
-				Grid_Size.GRID_HEIGHT * Grid_Size.HEIGH_BOX);
-		for (int i = Grid_Size.WIDTH_BOX; i < Grid_Size.GRID_WIDTH
-				* Grid_Size.WIDTH_BOX; i += Grid_Size.WIDTH_BOX) {
-			g.drawLine(i, 0, i, Grid_Size.GRID_HEIGHT * Grid_Size.HEIGH_BOX);
+		g.drawRect(0, 0, GridSize.GRID_WIDTH * GridSize.WIDTH_BOX,
+				GridSize.GRID_HEIGHT * GridSize.HEIGH_BOX);
+		for (int i = GridSize.WIDTH_BOX; i < GridSize.GRID_WIDTH
+				* GridSize.WIDTH_BOX; i += GridSize.WIDTH_BOX) {
+			g.drawLine(i, 0, i, GridSize.GRID_HEIGHT * GridSize.HEIGH_BOX);
 		}
-		for (int i = Grid_Size.HEIGH_BOX; i < Grid_Size.GRID_HEIGHT
-				* Grid_Size.HEIGH_BOX; i += Grid_Size.HEIGH_BOX) {
-			g.drawLine(0, i, Grid_Size.GRID_WIDTH * Grid_Size.WIDTH_BOX, i);
+		for (int i = GridSize.HEIGH_BOX; i < GridSize.GRID_HEIGHT
+				* GridSize.HEIGH_BOX; i += GridSize.HEIGH_BOX) {
+			g.drawLine(0, i, GridSize.GRID_WIDTH * GridSize.WIDTH_BOX, i);
 		}
 
 	}
