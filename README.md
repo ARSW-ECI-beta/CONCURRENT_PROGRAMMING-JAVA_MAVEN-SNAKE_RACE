@@ -2,7 +2,7 @@
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
 
-## Laboratorio - Programación concurrente, condiciones de carrera, esquemas de sincronización, colecciones sincronizadas y concurrentes.
+## Laboratorio Programación concurrente, condiciones de carrera, esquemas de sincronización, colecciones sincronizadas y concurrentes - Caso Snake Race
 
 ### Descripción
 Este ejercicio tiene como fin que el estudiante conozca y aplique conceptos propios de la programación concurrente.
@@ -50,7 +50,7 @@ SnakeRace es una versión autónoma, multi-serpiente del famoso juego 'snake', b
 
 ![](img/sshot.png)
 
-Ejercicio
+### Parte III
 
 1. Analice el código para entender cómo hace uso de hilos para crear un comportamiento autónomo de las N serpientes.
 
